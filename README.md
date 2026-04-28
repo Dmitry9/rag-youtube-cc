@@ -31,6 +31,12 @@ User question
 Answer with "▶ Watch at 0:47" deep-links
 ```
 
+## Learning by building
+
+If you're using this repo to learn RAG, follow [`LEARNING_PLAN.md`](LEARNING_PLAN.md)
+— a 10-step build-as-you-learn curriculum with exercises, checkpoints, and
+self-test questions tied to each doc below.
+
 ## Documents in this folder
 
 Read in order if you're new to the project:
