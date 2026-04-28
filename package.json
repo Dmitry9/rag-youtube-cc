@@ -1,0 +1,34 @@
+{
+  "name": "rag-youtube-cc",
+  "version": "1.0.0",
+  "description": "A production-grade Retrieval-Augmented Generation system for querying a library of video course transcripts. Built on Node.js + LangChain.js + Postgres/pgvector.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "check": "tsx src/check.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dmitry9/rag-youtube-cc.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Dmitry9/rag-youtube-cc/issues"
+  },
+  "homepage": "https://github.com/Dmitry9/rag-youtube-cc#readme",
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "@types/pg": "^8.20.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "pg": "^8.20.0"
+  }
+}
