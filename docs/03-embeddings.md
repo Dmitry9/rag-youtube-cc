@@ -89,14 +89,14 @@ general-purpose underperforms on eval.
 
 ## Recommended models (2026)
 
-| Model | Dims | Cost / 1M tok | When |
-|---|---|---|---|
-| **`text-embedding-3-small`** (OpenAI) | 1536 | $0.02 | Default. Fast, cheap, solid. |
-| `text-embedding-3-large` (OpenAI) | 3072 | $0.13 | When small plateaus on eval. |
-| `voyage-3-large` (Voyage AI) | 1024 | premium | Often tops MTEB; technical content. |
-| `embed-v4` (Cohere) | 1024 | competitive | Strong multilingual; int8 variants. |
-| `bge-m3` / `bge-large-en-v1.5` (open) | 1024 | self-host | Free; competitive quality. |
-| `nomic-embed-text-v1.5` (open) | 768 | self-host | Variable dims; good self-hosted option. |
+| Model                                 | Dims | Cost / 1M tok | When                                    |
+| ------------------------------------- | ---- | ------------- | --------------------------------------- |
+| **`text-embedding-3-small`** (OpenAI) | 1536 | $0.02         | Default. Fast, cheap, solid.            |
+| `text-embedding-3-large` (OpenAI)     | 3072 | $0.13         | When small plateaus on eval.            |
+| `voyage-3-large` (Voyage AI)          | 1024 | premium       | Often tops MTEB; technical content.     |
+| `embed-v4` (Cohere)                   | 1024 | competitive   | Strong multilingual; int8 variants.     |
+| `bge-m3` / `bge-large-en-v1.5` (open) | 1024 | self-host     | Free; competitive quality.              |
+| `nomic-embed-text-v1.5` (open)        | 768  | self-host     | Variable dims; good self-hosted option. |
 
 Our default: **`text-embedding-3-small`**. Justified because:
 - 1536 dims is plenty for ~500 chunks of course content.
@@ -161,3 +161,21 @@ Measure with the harness in `07-evaluation.md`.
 
 The usual upgrade path: small → add reranker → large embeddings → fine-tune.
 Most teams stop at "small + reranker" and never need the rest.
+
+
+## Mix-up worth fixing.
+
+One chunk → one vector. Not one token → one vector.
+
+The chunk of ~400 tokens (a few paragraphs of text) gets fed to the embedding model, and the model returns a single 1536-dim vector that represents the meaning of the whole chunk together. The 400 tokens collapse into 1536 numbers, total.
+
+On the number range: the components are not bounded to [-1, 1]. They're arbitrary real numbers — typically small floats clustered near zero (you saw this in Beat 2 — things like 0.013, -0.027, etc.). What is ≈1 is the vector's overall length (||v|| ≈ 1), because OpenAI normalizes the whole vector to unit length. That's the property you verified in Beat 3 with ||dog|| = 0.9999....
+
+Quick recap of the levels:
+
+token = a BPE piece of text (used for counting — pricing, context-window limits)
+chunk = ~400 tokens of text, the unit we embed
+vector = 1536 floats, one per chunk, pointing somewhere in 1536-dim space
+||vector|| ≈ 1 (unit length), but individual coordinates are unbounded small floats
+
+The token only matters as a unit of measurement for "how much text is in this chunk" and "how much will OpenAI charge me." Tokens themselves never become vectors in our pipeline — only chunks do.
