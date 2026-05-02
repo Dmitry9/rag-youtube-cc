@@ -3,14 +3,15 @@ import { encoding_for_model } from "tiktoken";
 const enc = encoding_for_model("text-embedding-3-small");
 const tokenCount = (s: string) => enc.encode(s).length;
 
-interface Segment { text: string; start: number; duration: number; }
+export interface Segment { text: string; start: number; duration: number; }
+export interface Transcript { videoId: string; courseId: string; segments: Segment[]; }
 interface Chunk {
   pageContent: string;
   metadata: { videoId: string; courseId: string; startTime: number; endTime: number; chunkIndex: number; };
 }
 
 export function chunkTranscript(
-  transcript: { videoId: string; courseId: string; segments: Segment[] },
+  transcript: Transcript,
   { chunkTokens = 400, overlapTokens = 60 } = {}
 ): Chunk[] {
   const { videoId, courseId, segments } = transcript;
