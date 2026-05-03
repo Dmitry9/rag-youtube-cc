@@ -7,7 +7,8 @@
     "doc": "docs"
   },
   "scripts": {
-    "check": "tsx src/check.ts"
+    "check": "tsx src/check.ts",
+    "ingest": "tsx src/ingest/runIngest.ts"
   },
   "repository": {
     "type": "git",
