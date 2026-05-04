@@ -8,7 +8,8 @@
   },
   "scripts": {
     "check": "tsx src/check.ts",
-    "ingest": "tsx src/ingest/runIngest.ts"
+    "ingest": "tsx src/ingest/runIngest.ts",
+    "search": "tsx src/retrieve/searchCli.ts"
   },
   "repository": {
     "type": "git",
