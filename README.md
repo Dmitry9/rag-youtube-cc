@@ -3,11 +3,15 @@
 A production-grade Retrieval-Augmented Generation system for querying a library
 of video course transcripts. Built on Node.js + LangChain.js + Postgres/pgvector.
 
-## What this repo will do
+## What it does
 
-Given ~100 video transcripts (10 min average), let a user ask a natural-language
-question and get back a grounded answer with deep-links to the exact moment in
+Given ~100 video transcripts (10 min average), a user asks a natural-language
+question and gets back a grounded answer with deep-links to the exact moment in
 the source video.
+
+**Status:** steps 0–6 of the curriculum are built and working — the `ingest`,
+`search`, and `ask` CLIs run the full pipeline below. Steps 7–10 (the eval
+harness: recall@5, MRR, LLM-as-judge, cost telemetry) are in progress.
 
 ```
 User question
@@ -71,13 +75,15 @@ Read in order if you're new to the project:
 - **Not skipping reranking.** It's the single biggest cheap win after chunking.
 - **Not skipping the eval set.** Tuning without measurement is guessing.
 
-## Quickstart (once implemented)
+## Quickstart
 
 ```bash
 npm install
 cp .env.example .env             # add OPENAI_API_KEY, COHERE_API_KEY, ANTHROPIC_API_KEY, DATABASE_URL
-npm run db:migrate               # apply schema from docs/04-pgvector-setup.md
-npm run ingest -- transcripts/   # chunk + embed + insert
-npm run eval                     # run the eval harness
+npm run check                    # verify DB connectivity + pgvector (schema: docs/04-pgvector-setup.md)
+npm run ingest                   # chunk + embed + insert data/transcripts/*.json
+npm run search -- "react state" --rerank   # retrieval only: vector search + Cohere rerank
 npm run ask -- "how do I update state in react?"
 ```
+
+The eval harness (`docs/07-evaluation.md`) is the next step being built.
