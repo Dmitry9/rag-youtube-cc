@@ -35,6 +35,32 @@ User question
 Answer with "▶ Watch at 0:47" deep-links
 ```
 
+## The idea in pictures
+
+The two halves of every RAG system — retrieval finds the right chunks, generation
+turns them into a grounded answer:
+
+![RAG pipeline: question → embedding → search → chunks → context → LLM → answer](docs/images/rag-pipeline.png)
+
+**Ingestion** (`npm run ingest`): transcripts are split into chunks, each chunk is
+embedded, and the vector database stores the vector *and* the original text side
+by side:
+
+![Chunks pass through the embedding model; the vector database stores each chunk's text with its vector](docs/images/chunk-embed-store.png)
+
+**Retrieval** (`npm run search`): the question becomes a vector too, and the
+database finds the stored vectors closest to it — search by meaning, not keywords:
+
+![The query vector is compared against stored vectors; the closest ones win](docs/images/similarity-search.png)
+
+**Why pgvector**: vectors live alongside the relational data you already have —
+no separate vector DB to operate:
+
+![PostgreSQL + pgvector keeps embeddings in the same database as the rest of your rows](docs/images/pgvector-vs-atlas.png)
+
+*Stills from ["Vector Database Will Finally Make Sense After This"](https://youtu.be/-n4DglZ7Afc)
+by Cloud X Berry — a 4-minute primer worth watching before the docs below.*
+
 ## Learning by building
 
 If you're using this repo to learn RAG, follow [`LEARNING_PLAN.md`](LEARNING_PLAN.md)
